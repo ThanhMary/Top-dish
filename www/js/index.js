@@ -23,13 +23,13 @@ document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
-
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     
     document.addEventListener("offline", onOffline, false);
     if (cordova.platformId == 'android') {
-        StatusBar.backgroundColorByHexString("#ff5511");
+        StatusBar.backgroundColorByHexString("#7EABA6");
     }
+ 
 }
 
 

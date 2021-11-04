@@ -23,13 +23,13 @@ document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
-
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     
     document.addEventListener("offline", onOffline, false);
     if (cordova.platformId == 'android') {
-        StatusBar.backgroundColorByHexString("#ff5511");
+        StatusBar.backgroundColorByHexString("#7EABA6");
     }
+ 
 }
 
 
@@ -40,7 +40,7 @@ function onBatteryStatus(status) {
 
 function onOffline() {
     navigator.notification.confirm(
-        'Bonjour, désolée vous etes en mode offline',  // message
+        'Bonjour, desolee! Vous etes en mode offline',  // message
         'TOP DISH OFFLINE',            // title
         'OK'                  // buttonName
     );
