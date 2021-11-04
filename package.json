@@ -13,7 +13,7 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cordova-android": "^9.1.0",
+    "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^6.2.0",
     "cordova-pdf-generator": "^2.1.1",
@@ -38,7 +38,6 @@
       "cordova-plugin-statusbar": {}
     },
     "platforms": [
-      "android",
       "ios",
       "browser"
     ]

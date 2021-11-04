@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
        Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
@@ -17,13 +19,17 @@
        under the License.
 */
 
+var Q = require('q');
 var path = require('path');
 var fs = require('fs');
 var nopt = require('nopt');
 
 var Adb = require('./Adb');
 
+var builders = require('./builders/builders');
 var events = require('cordova-common').events;
+var spawn = require('cordova-common').superspawn.spawn;
+var CordovaError = require('cordova-common').CordovaError;
 var PackageType = require('./PackageType');
 
 module.exports.parseBuildOptions = parseOpts;
@@ -108,7 +114,7 @@ function parseOpts (options, resolvedTarget, projectRoot) {
         let shouldWarn = false;
         const signingKeys = ['keystore', 'alias', 'storePassword', 'password', 'keystoreType'];
 
-        for (const key in packageArgs) {
+        for (let key in packageArgs) {
             if (!shouldWarn && signingKeys.indexOf(key) > -1) {
                 // If we enter this condition, we have a key used for signing a build,
                 // but we are missing some required signing properties
@@ -142,7 +148,7 @@ function parseOpts (options, resolvedTarget, projectRoot) {
  */
 module.exports.runClean = function (options) {
     var opts = parseOpts(options, null, this.root);
-    var builder = this._builder;
+    var builder = builders.getBuilder();
 
     return builder.prepEnv(opts).then(function () {
         return builder.clean(opts);
@@ -163,7 +169,7 @@ module.exports.runClean = function (options) {
  */
 module.exports.run = function (options, optResolvedTarget) {
     var opts = parseOpts(options, optResolvedTarget, this.root);
-    var builder = this._builder;
+    var builder = builders.getBuilder();
 
     return builder.prepEnv(opts).then(function () {
         if (opts.prepEnv) {
@@ -193,8 +199,35 @@ module.exports.run = function (options, optResolvedTarget) {
  * Returns "arm" or "x86".
  */
 module.exports.detectArchitecture = function (target) {
-    return Adb.shell(target, 'cat /proc/cpuinfo').then(function (output) {
-        return /intel/i.exec(output) ? 'x86' : 'arm';
+    function helper () {
+        return Adb.shell(target, 'cat /proc/cpuinfo').then(function (output) {
+            return /intel/i.exec(output) ? 'x86' : 'arm';
+        });
+    }
+    // It sometimes happens (at least on OS X), that this command will hang forever.
+    // To fix it, either unplug & replug device, or restart adb server.
+    return helper().timeout(1000, new CordovaError('Device communication timed out. Try unplugging & replugging the device.')).then(null, function (err) {
+        if (/timed out/.exec('' + err)) {
+            // adb kill-server doesn't seem to do the trick.
+            // Could probably find a x-platform version of killall, but I'm not actually
+            // sure that this scenario even happens on non-OSX machines.
+            events.emit('verbose', 'adb timed out while detecting device/emulator architecture. Killing adb and trying again.');
+            return spawn('killall', ['adb']).then(function () {
+                return helper().then(null, function () {
+                    // The double kill is sadly often necessary, at least on mac.
+                    events.emit('warn', 'adb timed out a second time while detecting device/emulator architecture. Killing adb and trying again.');
+                    return spawn('killall', ['adb']).then(function () {
+                        return helper().then(null, function () {
+                            return Q.reject(new CordovaError('adb timed out a third time while detecting device/emulator architecture. Try unplugging & replugging the device.'));
+                        });
+                    });
+                });
+            }, function () {
+                // For non-killall OS's.
+                return Q.reject(err);
+            });
+        }
+        throw err;
     });
 };
 
@@ -222,23 +255,45 @@ module.exports.findBestApkForArchitecture = function (buildResults, arch) {
 };
 
 function PackageInfo (keystore, alias, storePassword, password, keystoreType) {
-    const createNameKeyObject = (name, value) => ({ name, value: value.replace(/\\/g, '\\\\') });
-
-    this.data = [
-        createNameKeyObject('key.store', keystore),
-        createNameKeyObject('key.alias', alias)
-    ];
-
-    if (storePassword) this.data.push(createNameKeyObject('key.store.password', storePassword));
-    if (password) this.data.push(createNameKeyObject('key.alias.password', password));
-    if (keystoreType) this.data.push(createNameKeyObject('key.store.type', keystoreType));
+    this.keystore = {
+        'name': 'key.store',
+        'value': keystore
+    };
+    this.alias = {
+        'name': 'key.alias',
+        'value': alias
+    };
+    if (storePassword) {
+        this.storePassword = {
+            'name': 'key.store.password',
+            'value': storePassword
+        };
+    }
+    if (password) {
+        this.password = {
+            'name': 'key.alias.password',
+            'value': password
+        };
+    }
+    if (keystoreType) {
+        this.keystoreType = {
+            'name': 'key.store.type',
+            'value': keystoreType
+        };
+    }
 }
 
 PackageInfo.prototype = {
-    appendToProperties: function (propertiesParser) {
-        for (const { name, value } of this.data) propertiesParser.set(name, value);
-
-        propertiesParser.save();
+    toProperties: function () {
+        var self = this;
+        var result = '';
+        Object.keys(self).forEach(function (key) {
+            result += self[key].name;
+            result += '=';
+            result += self[key].value.replace(/\\/g, '\\\\');
+            result += '\n';
+        });
+        return result;
     }
 };
 
