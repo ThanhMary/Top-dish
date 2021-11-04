@@ -1,0 +1,20 @@
+{
+  "name": " TOP PLATS APP",
+  "short_name": "Top Plats",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffff",
+  "icons": [
+    {
+      "src": "img/plat50x50.png",
+      "sizes": "50x50",
+      "type": "image/png"
+    },
+    {
+      "src": "img/plat144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ]
+
+}

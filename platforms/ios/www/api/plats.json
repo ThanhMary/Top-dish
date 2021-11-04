@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Plat français",
+    "description": " lorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem lorem",
+    "img": "https://erasmusplace.com/wp-content/uploads/2019/01/coq-au-vin-1024x683.jpeg",
+    "link": "https://fr.wikipedia.org/wiki/One_Piece"
+  },
+  {
+    "name": "Plats italien",
+    "description": "lorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem lorem",
+    "img": "https://www.compagnons-recoltants.com/images/magret.jpg",
+    "link": "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiD87zRibnzAhXvBmMBHTY4DM0QmhN6BAhDEAI&url=https%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FHunter_%25C3%2597_Hunter&usg=AOvVaw3T0sTBH9dQQJniRHVPWDlG"
+  },
+  {
+    "name": "Plat allemand",
+    "description": "lorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem lorem",
+    "img": "https://larecette.net/wp-content/uploads/2018/06/istock-tartiflette.jpg",
+    "link": "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjwxdeTirnzAhVT8uAKHaB0D0MQmhN6BAg7EAI&url=https%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FFullmetal_Alchemist&usg=AOvVaw3zkIYNjHSncaMnemB-WIqH"
+  },
+  {
+    "name": "Plat espagnol",
+    "description": "lorem lorem lorem loremlorem loremlorem loremlorem loremlorem lorem",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHtwyx2P65_SVoXLJmpXnQp11GS387sd_ZMw&usqp=CAU",
+    "link": "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjmwozJirnzAhWTmhQKHROyDS0QmhN6BAg_EAI&url=https%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FL%2527Attaque_des_Titans&usg=AOvVaw2-X5Uu_7ImQJfHheCtCEpw"
+  },
+  {
+    "name": "Plat anglais",
+    "description": "lorem loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem lorem",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdYxLDNeMif9lNBUmdloIpSAmDf7kC32zRMA&usqp=CAU",
+    "link": "https://en.wikipedia.org/wiki/Fate/stay_night:_Unlimited_Blade_Works_(TV_series)"
+  }
+]

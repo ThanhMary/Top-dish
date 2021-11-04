@@ -1,0 +1,31 @@
+<script src="https://www.w3schools.com/lib/w3.js"></script>
+<div w3-include-html="header.html"></div>
+ <script>w3.includeHTML();</script>
+
+<div class="container">
+    <br>
+    <center><h2>CREATION TOP</h2></center>
+    <form>
+    <div class="row">
+        Name <input class="form-control" type="text" id="top_name" /> 
+    </div>
+    <div class="row">
+        Image <input class="form-control" type="text" id="top_img"> 
+    </div>
+
+    <br>
+      <div class="row">
+        <button class="form-control btn btn-secondary" id="save_top"  type="submit">Add</button>
+    </div>
+</form>
+<div class="row">
+    <h2>Top List</h2>
+    <p id="top_wrapper"></p>
+  </div>
+<br>
+<div id="lepdf">
+  Ceci est la partie à imprimer
+</div>
+<script src="js/localstorageCrud.js"></script>
+<script src="js/pdf.js"></script>
+</div>
